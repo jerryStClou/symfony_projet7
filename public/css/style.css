@@ -1,0 +1,39 @@
+nav
+{
+    background-color: black;
+    height: 9vh;
+}
+
+nav ul
+{
+    display: flex;
+    align-items: center;
+    height: 100%;
+    list-style: none;
+}
+
+.iconeImage
+{
+    width:9%;
+}
+
+.iconeImage img
+{
+    width: 100%;
+}
+
+nav ul a
+{
+    text-decoration: none;
+    color:white;
+    margin-left:1.5em;
+    font-size: 21px;
+}
+
+
+nav ul a:hover
+{
+    text-decoration: underline;
+    color:rgb(17, 252, 158);
+}
+
