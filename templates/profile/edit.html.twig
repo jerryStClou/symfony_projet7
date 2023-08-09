@@ -5,11 +5,14 @@
 
 {% block body %}
 	<h1>Edit
-		{{userName}}</h1>
+		{{user.nom}}</h1>
 
 	{{ include('profile/_form.html.twig', {'button_label': 'Update'}) }}
-
-	<a href="{{ path('app_profile_index') }}">back to list</a>
+	{% if is_granted('ROLE_ADMIN')  and utilisateur == false %}
+		<a href="{{path('app_leProfile')}}">back to list</a><br><br>
+	{% else %}
+		<a href="{{path('app_profil_edit_password')}}">modifier votre mot de passe</a>
+	{% endif %}
 
 	{{ include('profile/_delete_form.html.twig') }}
 {% endblock %}

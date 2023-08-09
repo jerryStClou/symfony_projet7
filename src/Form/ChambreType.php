@@ -16,6 +16,7 @@ class ChambreType extends AbstractType
             ->add('titre')
             ->add('description_courte')
             ->add('description_longue')
+            ->add('prixJournalier')
             // ->add('create_at')
             ->add('photo', FileType::class, [
                 'multiple' => true,

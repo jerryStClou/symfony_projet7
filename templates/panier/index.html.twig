@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello PanierController!
+{% endblock %}
+
+{% block body %}
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Titre</th>
+				<th>Description_courte</th>
+				<th>Description_longue</th>
+				<th>Prix journalier</th>
+				{# <th>Quantite</th> #}
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for data in dataCart %}
+				<tr>
+					<td>{{ data.chambre.titre }}</td>
+					<td>{{ data.chambre.descriptionCourte }}</td>
+					<td>{{ data.chambre.descriptionLongue }}</td>
+					<td>{{ data.chambre.prixJournalier }}</td>
+
+					{# <td>quantity:{{data.quantity}}</td> #}
+
+					<td>
+						<a href="{{ path('app_leProfile')}}" class="btn btn-success">une nouvelle</a>
+						<a href="{{ path('app_remove_panier', {'id': data.chambre.id}) }}" class="btn btn-warning">Enlever</a>
+
+						<a href="{{ path('app_delete_panier', {'id': data.chambre.id}) }}" class="btn btn-danger">Retirer</a>
+
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</tbody>
+</table>
+<br><br><br>
+<a href="{{ path('app_flush_panier') }}" class="btn btn-dark">Supprimer tout la reservation</a>
+<br><br>
+<a class='btn btn-info' href="{{path('app_reservation')}}">reserver</a>{% endblock %}

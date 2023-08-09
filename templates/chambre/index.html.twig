@@ -13,6 +13,7 @@
 				<th>Titre</th>
 				<th>Description_courte</th>
 				<th>Description_longue</th>
+				<th>Prix journalier</th>
 				<th>Photo</th>
 				<th>actions</th>
 			</tr>
@@ -24,6 +25,7 @@
 					<td>{{ chambre.titre }}</td>
 					<td>{{ chambre.descriptionCourte }}</td>
 					<td>{{ chambre.descriptionLongue }}</td>
+					<td>{{ chambre.prixJournalier }}</td>
 					{# <td>{{ chambre.createAt ? chambre.createAt|date('Y-m-d H:i:s') : '' }}</td> #}
 					<td>
 						{% for photo in chambre.photos %}
@@ -35,7 +37,7 @@
 						{% if is_granted('ROLE_ADMIN') %}
 							<a href="{{ path('app_chambre_edit', {'id': chambre.id}) }}">edit</a>
 						{% endif %}
-						<a href="#">Reserver</a>
+						<a href="{{ path('app_add_panier', {'id': chambre.id}) }}">Reserver</a>
 					</td>
 				</tr>
 			{% else %}

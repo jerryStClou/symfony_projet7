@@ -31,6 +31,9 @@ class Chambre
     #[ORM\OneToMany(mappedBy: 'chambre', targetEntity: Photo::class)]
     private Collection $photos;
 
+    #[ORM\Column(nullable: true)]
+    private ?float $prixJournalier = null;
+
     public function __construct()
     {
         $this->photos = new ArrayCollection();
@@ -117,6 +120,18 @@ class Chambre
                 $photo->setChambre(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPrixJournalier(): ?float
+    {
+        return $this->prixJournalier;
+    }
+
+    public function setPrixJournalier(?float $prixJournalier): static
+    {
+        $this->prixJournalier = $prixJournalier;
 
         return $this;
     }
