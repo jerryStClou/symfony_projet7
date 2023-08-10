@@ -17,9 +17,58 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class ReservationController extends AbstractController
 {
+    public function __construct(protected ParameterBagInterface $parameterBag)
+    {
+    }
+
+    #[Route('/reservation/dateChoice/{id}', name: 'app_dateChoice')]
+    public function dateChoice(Request $request, EntityManagerInterface $entityManager, SessionInterface $session, ChambreRepository $chambreRepository, $id)
+    {
+        $form = $this->createForm(ReservationType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $cart = $session->get('cart');
+            $startDate = $form->get('startDate')->getData();
+            $endDate = $form->get('endDate')->getData();
+            $interval = date_diff($startDate, $endDate);
+            $days = $interval->days + 1;
+            $total = $chambreRepository->find($id)->getPrixJournalier() * $days;
+            $cart[$id] =
+                [
+                    'startDate' => $form->get('startDate')->getData(),
+                    'endDate' => $form->get('endDate')->getData(),
+                    'days' => $days,
+                    'total' => $total,
+                    'chambre' => $chambreRepository->find($id)
+                ];
+            $session->set('cart', $cart);
+
+
+
+            // $reservation = [
+            //     'endDate' => $endDate,
+            //     'startDate' => $startDate,
+            //     'total' => $total,
+            //     'chambre' => $chambreRepository->find($id)
+            // ];
+
+            // $session->set('reservation', $reservation);
+            return $this->redirectToRoute('app_reservation');
+        }
+
+        return $this->render('reservation/dateChoice.html.twig', [
+            'form' => $form,
+            'chambre' => $chambreRepository->find($id)
+        ]);
+    }
+
+
+
+
     #[Route('/reservation', name: 'app_reservation')]
     public function index(UserRepository $userRepository, Request $request, EntityManagerInterface $entityManager, SessionInterface $session, ChambreRepository $chambreRepository): Response
     {
@@ -31,69 +80,52 @@ class ReservationController extends AbstractController
         }
         $user = $userRepository->find($this->getUser());
 
-        $form = $this->createForm(ReservationType::class);
-        $form->handleRequest($request);
-        $cart3 = 0;
-        if ($form->isSubmitted() && $form->isValid()) {
 
-            $startDate = $form->get('startDate')->getData();
-            $endDate = $form->get('endDate')->getData();
-            $interval = date_diff($startDate, $endDate);
-            $days = $interval->days + 1;
-            $cart = $session->get('cart');
-
-            foreach ($cart as $id) {
-                $cart3 = $id;
-                // $total += $chambre->getPrixJournalier() * $quantity;
-            }
-            $chambre = $chambreRepository->find($cart3);
-            $total = $chambre->getPrixJournalier() * $days;
-            // foreach ($cart as $id => $quantity) {
-            //     $chambre = $chambreRepository->find($id);
-            //     $dataCart[] = [
-            //         "chambre" => $chambre,
-            //         'quantity' => $quantity
-            //     ];
-            //     $total += $chambre->getPrixJournalier() * $quantity;
-            // }
-
-            $reservation = [
-                'endDate' => $endDate,
-                'startDate' => $startDate,
-                'total' => $total,
-                'chambre' => $session->get('cart')
-            ];
-
-            $session->set('reservation', $reservation);
-            return $this->redirectToRoute('app_payment');
-        }
-        dd($cart3);
         return $this->render('reservation/index.html.twig', [
-            'form' => $form,
-            'chambres' => $chambreRepository->find($cart3)
+            'cart' => $session->get('cart')
         ]);
     }
+
+
+
+
     #[Route('/payment', name: 'app_payment')]
     public function payment(SessionInterface $session)
     {
-        $stripeKey = $this->parameterBag->get('stripeSecret');
+        if ($session->get('cart') == null) {
+            return $this->redirectToRoute('app_chambre_index');
+        }
         $reservation = $session->get('reservation');
+        foreach ($session->get('cart') as $item) {
+
+
+            $tableau[] = [
+
+
+                'price_data' => [
+                    'currency' => 'eur',
+                    'product_data' => [
+                        'name' => $item['chambre']->getTitre() . '-' . $item['chambre']->getDescriptionCourte() . '-' . $item['chambre']->getDescriptionLongue(),
+
+                    ],
+
+                    'unit_amount' => $item['total'] * 100,
+                ],
+                'quantity' => 1,
+
+
+
+            ];
+        }
+
+
+        $stripeKey = $this->parameterBag->get('stripeSecret');
 
         $stripe = new StripeClient($stripeKey);
 
         $checkout_session = $stripe->checkout->sessions->create([
             'customer_email' => $this->getUser()->getEmail(),
-            'line_items' => [[
-                'price_data' => [
-                    'currency' => 'eur',
-                    'product_data' => [
-                        'name' => $reservation['chambre']->getTitre() . '-' . $reservation['chambre']->getDescriptionCourte() . '-' . $reservation['chambre']->getDescriptionLongue(),
-                    ],
-
-                    'unit_amount' => $reservation['total'] * 10,
-                ],
-                'quantity' => 1,
-            ]],
+            'line_items' => $tableau,
             'mode' => 'payment',
             'success_url' => $this->generateUrl('app_success', [], UrlGeneratorInterface::ABSOLUTE_URL),
             'cancel_url' => $this->generateUrl('app_cancel', [], UrlGeneratorInterface::ABSOLUTE_URL),
@@ -106,20 +138,25 @@ class ReservationController extends AbstractController
     public function appSuccess(ChambreRepository $chambreRepository, SessionInterface $session, EntityManagerInterface $entityManager, MailerInterface $mailer)
     {
         $commande = new Commande();
-        $reservation = $session->get('reservation');
-        $uniqId = uniqid();
-        $commande->setUser($this->getUser())
-            ->setChambre($chambreRepository->find($session->get('cart')))
-            ->setCreateAt(new DateTimeImmutable())
-            ->setTotal($session->get('reservation')['total'])
-            ->setStartDate(date_format($reservation['startDate'], 'Y-m-d'))
-            ->setEndDate(date_format($reservation['endDate'], 'Y-m-d'))
-            ->setCommandeId($uniqId);
+        $cart = $session->get('cart');
 
+        // foreach ($cart as $id) {
+        //     dd($id);
+        // }
+        // dd($cart[3]);
+        $uniqId = uniqid();
+        foreach ($cart as $id => $value) {
+            $commande->setUser($this->getUser())
+                ->setChambre($chambreRepository->find($id))
+                ->setCreateAt(new DateTimeImmutable())
+                ->setTotal($value['total'])
+                ->setStartDate(date_format($value['startDate'], 'Y-m-d'))
+                ->setEndDate(date_format($value['endDate'], 'Y-m-d'))
+                ->setCommandeId($uniqId);
+        }
         $entityManager->persist($commande);
         $entityManager->flush();
         $session->set('cart', null);
-        $session->set('reservation', null);
 
         // envoie d'email
         $email = (new TemplatedEmail())

@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ContactController!
+{% endblock %}
+
+{% block body %}
+	<br><br><br>
+	<center>
+		<div class="formCRUD">
+			<h1>Form Contact</h1>
+			{{form_start(form)}}
+			<span class='m-1'>{{form_row(form.firstName)}}</span>
+			<span class='m-1'>{{form_row(form.lastName)}}</span>
+			<span class='m-1'>{{form_row(form.email)}}</span>
+			<span class='m-1'>{{form_row(form.description)}}</span>
+			<button class="submitCRUDStyle">{{button_label|default('Send')}}</button>
+			{{form_end(form)}}
+		</div>
+	</center>
+{% endblock %}

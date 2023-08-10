@@ -37,3 +37,23 @@ nav ul a:hover
     color:rgb(17, 252, 158);
 }
 
+/*------------------------------------------Style home ----------------------------------------------*/
+
+
+
+
+.section
+{
+    width:100%;
+    text-align: center;
+}
+
+
+
+.chambres
+{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}

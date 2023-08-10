@@ -4,23 +4,38 @@
 {% endblock %}
 
 {% block body %}
-
-	<div>
-		{{chambres.titre}}
-		{{chambres.description_courte}}
-		{{chambres.Description_longue}}
-	</div>
-
-
+	<br><br>
+	<table class="table">
+		<thead>
+			<tr class="table-info">
+				<th scope="col">Titre</th>
+				<th scope="col">descriptionCourte</th>
+				<th scope="col">DescriptionLongue</th>
+				<th scope="col">Start Date</th>
+				<th scope="col">End Date</th>
+				<th scope="col">Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for data in cart %}
+				{# {{dump(data)}} #}
+				<tr>
+					<td>{{data.chambre.titre}}</td>
+					<td>{{data.chambre.descriptionCourte}}</td>
+					<td>{{data.chambre.descriptionLongue}}</td>
+					<td>{{data.startDate|date('Y-m-d')}}</td>
+					<td>{{data.endDate|date('Y-m-d')}}</td>
+					<td>
+						<a href="{{ path('app_chambre_index')}}" class="btn btn-success">une nouvelle</a>
+						<a href="{{ path('app_delete_panier', {'id': data.chambre.id}) }}" class="btn btn-danger">Retirer</a>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 	<br><br><br>
-	<center>
-		<div class="formCRUD">
-			<h1>Reservation</h1>
-			{{form_start(form)}}
-			<span class='m-1'>{{form_row(form.startDate)}}</span>
-			<span class='m-1'>{{form_row(form.endDate)}}</span>
-			<button class="submitCRUDStyle">{{button_label|default('Send')}}</button>
-			{{form_end(form)}}
-		</div>
-	</center>
+	<a href="{{ path('app_flush_panier') }}" class="btn btn-dark">Supprimer tout la reservation</a>
+	<br><br>
+	<a class='btn btn-info' href="{{path('app_payment')}}">Payer</a>
+
 {% endblock %}

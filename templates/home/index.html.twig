@@ -1,20 +1,38 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Hello HomeController!
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+	<div class="section">
+		<div class="homePresentation">
+			<h1>Home</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+			<br><br>
+			<img src="{{asset('images/1.png')}}" alt="">
+		</div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/stagiaire/Desktop/symfony/projet7/HOTELHOUSE/src/Controller/HomeController.php'|file_link(0) }}">src/Controller/HomeController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/stagiaire/Desktop/symfony/projet7/HOTELHOUSE/templates/home/index.html.twig'|file_link(0) }}">templates/home/index.html.twig</a></code></li>
-    </ul>
-</div>
+	</div>
+
+	<br>
+	<h1>Les chambres</h1>
+	<div class="chambres">
+
+		{% for chambre in chambres %}
+
+			<div class="card" style="width: 18rem;">
+				{% for photo in chambre.photos %}
+					<img src="{{asset('images/Chambres/'~ photo.reference)}}" class="card-img-top" alt="...">
+				{% endfor %}
+				<div class="card-body">
+					<h5 class="card-title">{{ chambre.titre }}</h5>
+					<p class="card-text">{{ chambre.descriptionCourte }}</p>
+					<p class="card-text">{{ chambre.prixJournalier }}</p>
+					<a href="{{path('app_chambre_index')}}" class="btn btn-primary">Go somewhere</a>
+				</div>
+			</div>
+
+		{% endfor %}
+	</div>
+
 {% endblock %}

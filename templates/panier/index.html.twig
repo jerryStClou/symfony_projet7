@@ -26,8 +26,7 @@
 					{# <td>quantity:{{data.quantity}}</td> #}
 
 					<td>
-						<a href="{{ path('app_leProfile')}}" class="btn btn-success">une nouvelle</a>
-						<a href="{{ path('app_remove_panier', {'id': data.chambre.id}) }}" class="btn btn-warning">Enlever</a>
+						<a href="{{ path('app_chambre_index')}}" class="btn btn-success">une nouvelle</a>
 
 						<a href="{{ path('app_delete_panier', {'id': data.chambre.id}) }}" class="btn btn-danger">Retirer</a>
 

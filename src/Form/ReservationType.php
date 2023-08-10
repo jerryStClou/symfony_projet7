@@ -13,7 +13,7 @@ class ReservationType extends AbstractType
     {
         $builder
             ->add('startDate', DateType::class)
-            ->add('endDate', DateType::class);;
+            ->add('endDate', DateType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

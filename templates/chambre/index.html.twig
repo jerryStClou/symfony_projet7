@@ -37,7 +37,7 @@
 						{% if is_granted('ROLE_ADMIN') %}
 							<a href="{{ path('app_chambre_edit', {'id': chambre.id}) }}">edit</a>
 						{% endif %}
-						<a href="{{ path('app_add_panier', {'id': chambre.id}) }}">Reserver</a>
+						<a href="{{ path('app_dateChoice', {'id': chambre.id}) }}">Reserver</a>
 					</td>
 				</tr>
 			{% else %}
