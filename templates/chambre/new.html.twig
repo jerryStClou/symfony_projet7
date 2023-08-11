@@ -1,11 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Chambre{% endblock %}
+{% block title %}New Chambre
+{% endblock %}
 
 {% block body %}
-    <h1>Create new Chambre</h1>
+	<div class="container mt-5  p-5">
 
-    {{ include('chambre/_form.html.twig') }}
+		<h1>Create new Chambre</h1>
 
-    <a href="{{ path('app_chambre_index') }}">back to list</a>
+		{{ include('chambre/_form.html.twig') }}
+
+
+		<a href="{{ path('app_chambre_index') }}">back to list</a>
+	</div>
 {% endblock %}

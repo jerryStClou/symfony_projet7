@@ -4,7 +4,8 @@
 {% endblock %}
 
 {% block body %}
-	<h1>Chambre index</h1>
+	<br><br><br>
+	<h1 class="text-center">Chambres</h1>
 
 	<table class="table">
 		<thead>
@@ -33,11 +34,10 @@
 						{% endfor %}
 					</td>
 					<td>
-						<a href="{{ path('app_chambre_show', {'id': chambre.id}) }}">show</a>
-						{% if is_granted('ROLE_ADMIN') %}
-							<a href="{{ path('app_chambre_edit', {'id': chambre.id}) }}">edit</a>
-						{% endif %}
-						<a href="{{ path('app_dateChoice', {'id': chambre.id}) }}">Reserver</a>
+						<a href="{{ path('app_chambre_show', {'id': chambre.id}) }}" class="btn btn-success">show</a><br><br>
+						<a href="{{ path('app_chambre_edit', {'id': chambre.id}) }}" class="btn btn-warning">edit</a>
+						<br><br>
+						<a href="{{ path('app_dateChoice', {'id': chambre.id}) }}" class="btn btn-dark">Reserver</a>
 					</td>
 				</tr>
 			{% else %}
@@ -48,5 +48,5 @@
 		</tbody>
 	</table>
 
-	<a href="{{ path('app_chambre_new') }}">Create new</a>
+	<a href="{{ path('app_chambre_new') }}" class="btn btn-info">Create new</a>
 {% endblock %}

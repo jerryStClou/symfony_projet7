@@ -15,24 +15,31 @@
 	</div>
 
 	<br>
-	<h1>Les chambres</h1>
+	<hr>
+	<h2 class="text-center">Les chambres</h2>
+	<center>
+		<a href="{{path('app_chambre_index')}}" class="btn btn-success">Voir les chambres</a>
+	</center>
 	<div class="chambres">
 
-		{% for chambre in chambres %}
+		{% for chambre in chambres |slice(0, 10) %}
 
 			<div class="card" style="width: 18rem;">
 				{% for photo in chambre.photos %}
 					<img src="{{asset('images/Chambres/'~ photo.reference)}}" class="card-img-top" alt="...">
 				{% endfor %}
-				<div class="card-body">
+				<div class="card-body text-center">
 					<h5 class="card-title">{{ chambre.titre }}</h5>
 					<p class="card-text">{{ chambre.descriptionCourte }}</p>
 					<p class="card-text">{{ chambre.prixJournalier }}</p>
-					<a href="{{path('app_chambre_index')}}" class="btn btn-primary">Go somewhere</a>
+					<a href="{{ path('app_chambre_show', {'id': chambre.id}) }}" class="btn btn-primary">Voir</a>
 				</div>
 			</div>
 
 		{% endfor %}
+		<p>...</p>
+
+
 	</div>
 
 {% endblock %}

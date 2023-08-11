@@ -89,7 +89,7 @@ class ProfileController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_profile_show', methods: ['GET'])]
+    #[Route('/delete/{id}', name: 'app_profile_show', methods: ['GET'])]
     public function show(User $user): Response
     {
         return $this->render('profile/show.html.twig', [

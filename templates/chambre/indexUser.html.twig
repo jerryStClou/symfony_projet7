@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!
+{% endblock %}
+
+{% block body %}
+	<div class="chambres">
+		{% for chambre in chambres %}
+
+			<div class="card" style="width: 18rem;">
+				{% for photo in chambre.photos %}
+					<img src="{{asset('images/Chambres/'~ photo.reference)}}" class="card-img-top" alt="...">
+				{% endfor %}
+				<div class="card-body text-center">
+					<h5 class="card-title">{{ chambre.titre }}</h5>
+					<p class="card-text">{{ chambre.descriptionCourte }}</p>
+					<p class="card-text">{{ chambre.prixJournalier }}</p>
+					<a href="{{ path('app_chambre_show', {'id': chambre.id}) }}" class="btn btn-primary">Voir</a>
+				</div>
+			</div>
+
+		{% endfor %}
+
+	</div>
+{% endblock %}

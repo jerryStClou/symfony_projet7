@@ -10,33 +10,33 @@
 			<a href="{{path('app_home')}}">Home</a>
 		</li>
 
-
-		{% if  app.user %}
-			<li>
-				<a href="{{path('app_leProfile')}}">leProfile</a>
-			</li>
-			<li>
-				<a href="{{path('app_logout')}}">Logout</a>
-			</li>
-			<li>
-				<a href="{{path('app_chambre_index')}}">Les Chambres</a>
-			</li>
-		{% else %}
-			<li>
-				<a href="{{path('app_login')}}">Login</a>
-			</li>
-			<li>
-				<a href="{{path('app_register')}}">Register</a>
-			</li>
-		{% endif %}
 		<li>
-			<a href="{{path('app_contact')}}">Contact</a>
+			<a href="">Actualité</a>
 		</li>
 		<li>
 			<a href="{{path('app_acces')}}">Accès</a>
 		</li>
 		<li>
-			<a href="">Actualité</a>
+			<a href="{{path('app_contact')}}">Contact</a>
 		</li>
+		{% if  app.user %}
+			<li>
+				<a href="{{path('app_chambre_index')}}">Les Chambres</a>
+			</li>
+			<li>
+				<a href="{{path('app_leProfile')}}">Profil</a>
+			</li>
+			<li>
+				<a href="{{path('app_logout')}}">Déconnexion</a>
+			</li>
+		{% else %}
+			<li>
+				<a href="{{path('app_login')}}">Connexion</a>
+			</li>
+			<li>
+				<a href="{{path('app_register')}}">S'inscrire</a>
+			</li>
+		{% endif %}
+
 	</ul>
 </nav>

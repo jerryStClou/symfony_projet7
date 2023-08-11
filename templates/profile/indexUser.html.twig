@@ -37,9 +37,9 @@
 				{# <td>{{ user.createAt ? user.createAt|date('Y-m-d H:i:s') : '' }}</td> #}
 				{# <td>{{ user.isVerified ? 'Yes' : 'No' }}</td> #}
 				<td>
-					<a href="{{ path('app_profile_show', {'id': user.id}) }}">show</a>
+					<a href="{{ path('app_profile_show', {'id': user.id}) }}" class="btn btn-success">show</a>
 
-					<a href="{{ path('app_profile_edit', {'id': user.id}) }}">edit</a>
+					<a href="{{ path('app_profile_edit', {'id': user.id}) }}" class="btn btn-warning">edit</a>
 				</td>
 			</tr>
 		</tbody>

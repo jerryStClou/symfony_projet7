@@ -6,14 +6,15 @@
 {% block body %}
 	<br><br><br>
 	<center>
-		<div class="formCRUD">
+		<div class="container mt-5  p-5">
 			<h1>Form Contact</h1>
 			{{form_start(form)}}
-			<span class='m-1'>{{form_row(form.firstName)}}</span>
-			<span class='m-1'>{{form_row(form.lastName)}}</span>
-			<span class='m-1'>{{form_row(form.email)}}</span>
-			<span class='m-1'>{{form_row(form.description)}}</span>
-			<button class="submitCRUDStyle">{{button_label|default('Send')}}</button>
+			<span class='m-1'>{{form_row(form.firstName, {'attr': {'class': 'form-control'}})}}</span>
+			<span class='m-1'>{{form_row(form.lastName, {'attr': {'class': 'form-control'}})}}</span>
+			<span class='m-1'>{{form_row(form.email, {'attr': {'class': 'form-control'}})}}</span>
+			<span class='m-1'>{{form_row(form.description, {'attr': {'class': 'form-control'}})}}</span>
+			<br><br>
+			<button class="btn btn-success">{{button_label|default('Send')}}</button>
 			{{form_end(form)}}
 		</div>
 	</center>

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Photo;
 use DateTimeImmutable;
 use App\Entity\Chambre;
+use App\Entity\User;
 use App\Form\ChambreType;
 use App\Repository\ChambreRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,12 +18,24 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ChambreController extends AbstractController
 {
     #[Route('/', name: 'app_chambre_index', methods: ['GET'])]
-    public function index(ChambreRepository $chambreRepository): Response
+    public function index(ChambreRepository $chambreRepository,): Response
     {
-        return $this->render('chambre/index.html.twig', [
+        if ($this->getUser()) {
+            if ($this->getUser()->getRoles() == ["ROLE_USER", "ROLE_ADMIN"]) {
+                return $this->render('chambre/index.html.twig', [
+                    'chambres' => $chambreRepository->findAll(),
+                ]);
+            }
+        }
+
+
+        return $this->render('chambre/indexUser.html.twig', [
             'chambres' => $chambreRepository->findAll(),
         ]);
     }
+
+
+
 
     #[Route('/new', name: 'app_chambre_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
